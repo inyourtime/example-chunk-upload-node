@@ -7,7 +7,7 @@ const multer = require('multer')
 const cors = require('cors')
 
 const app = express()
-const upload = multer({ storage: multer.memoryStorage() })
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 100 * 1024 * 1024 } })
 
 app.use(cors())
 
