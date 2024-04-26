@@ -45,9 +45,6 @@ app.post('/upload', async (request, reply) => {
 })
 
 app.listen({ port: 5001 }, (err, address) => {
-  if (err) {
-    app.log.error(err)
-    process.exit(1)
-  }
+  if (err) throw err
   app.log.info(`Fastify server listening on ${address}`)
 })
