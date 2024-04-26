@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Upload with Chunking</title>
+  </head>
+  <body>
+    <input type="file" id="fileInput" />
+    <button onclick="uploadFile()">Upload</button>
+
+    <script>
+      const API_URL = 'localhost:3000'
+      async function uploadFile() {
+        const fileInput = document.getElementById('fileInput')
+        const file = fileInput.files[0]
+        const chunkSize = 50 * 1024 * 1024 // 1MB chunk size (adjust as needed)
+
+        let start = 0
+        let end = Math.min(chunkSize, file.size)
+        let chunkIndex = 0
+
+        while (start < file.size) {
+          const chunk = file.slice(start, end)
+          const formData = new FormData()
+          formData.append('file', chunk, `${file.name}.${chunkIndex}`)
+          formData.append('chunkIndex', chunkIndex)
+          formData.append('chunkTotal', Math.ceil(file.size / chunkSize))
+          formData.append('fileName', file.name)
+
+          try {
+            const response = await fetch(`${API_URL}`, {
+              method: 'POST',
+              body: formData,
+            })
+
+            if (!response.ok) {
+              throw new Error('Upload failed.')
+            }
+
+            // Update start and end for the next chunk
+            start = end
+            end = Math.min(start + chunkSize, file.size)
+            chunkIndex++
+          } catch (error) {
+            console.error('Error uploading chunk:', error)
+            break
+          }
+        }
+
+        console.log('File upload complete.')
+      }
+    </script>
+  </body>
+</html>

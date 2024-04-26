@@ -1,0 +1,19 @@
+{
+  "name": "example_chunk_upload",
+  "version": "1.0.0",
+  "description": "Example chunk upload with NodeJS Framework.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "format:fix": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "author": "inyourtimeguy@gmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.1.1",
+    "eslint": "^9.1.1",
+    "globals": "^15.0.0",
+    "prettier": "^3.2.5"
+  }
+}
