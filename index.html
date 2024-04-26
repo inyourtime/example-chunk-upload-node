@@ -7,14 +7,19 @@
   </head>
   <body>
     <input type="file" id="fileInput" />
-    <button onclick="uploadFile()">Upload</button>
+    <button id="uploadButton">Upload</button>
 
-    <script>
-      const API_URL = 'localhost:3000'
+    <script type="module">
+      import { v4 as uuidv4 } from 'https://jspm.dev/uuid'
+
+      const API_URL = 'http://localhost:5001'
+
       async function uploadFile() {
         const fileInput = document.getElementById('fileInput')
         const file = fileInput.files[0]
         const chunkSize = 50 * 1024 * 1024 // 1MB chunk size (adjust as needed)
+        const chunkTotal = Math.ceil(file.size / chunkSize)
+        const state = uuidv4()
 
         let start = 0
         let end = Math.min(chunkSize, file.size)
@@ -25,11 +30,12 @@
           const formData = new FormData()
           formData.append('file', chunk, `${file.name}.${chunkIndex}`)
           formData.append('chunkIndex', chunkIndex)
-          formData.append('chunkTotal', Math.ceil(file.size / chunkSize))
+          formData.append('chunkTotal', chunkTotal)
           formData.append('fileName', file.name)
+          formData.append('state', state)
 
           try {
-            const response = await fetch(`${API_URL}`, {
+            const response = await fetch(`${API_URL}/upload`, {
               method: 'POST',
               body: formData,
             })
@@ -50,6 +56,8 @@
 
         console.log('File upload complete.')
       }
+
+      document.getElementById('uploadButton').addEventListener('click', uploadFile)
     </script>
   </body>
 </html>
