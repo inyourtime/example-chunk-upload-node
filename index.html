@@ -17,7 +17,7 @@
       async function uploadFile() {
         const fileInput = document.getElementById('fileInput')
         const file = fileInput.files[0]
-        const chunkSize = 50 * 1024 * 1024 // 1MB chunk size (adjust as needed)
+        const chunkSize = 50 * 1024 * 1024 // 50MB chunk size (adjust as needed)
         const chunkTotal = Math.ceil(file.size / chunkSize)
         const state = uuidv4()
 
